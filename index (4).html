@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ================================================
+    META SETUP
+    - charset: UTF-8 for universal character support
+    - viewport: enables responsive scaling on all devices
+  ================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ApexPlanet Task 2 | Contact & To-Do App</title>
+
+  <!-- Google Fonts: Poppins for modern, clean typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- External CSS file -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ================================================
+    TOAST NOTIFICATION
+    Fixed overlay message shown after actions.
+    Controlled entirely by JavaScript.
+  ================================================ -->
+  <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- ================================================
+    NAVBAR
+    Uses Flexbox: logo on left, links on right.
+    Sticky so it stays visible while scrolling.
+  ================================================ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner">
+
+      <!-- Brand logo -->
+      <a class="nav-brand" href="#">
+        <span class="brand-dot"></span>
+        DevHub
+      </a>
+
+      <!-- Desktop navigation links -->
+      <nav class="nav-links" id="navLinks">
+        <a href="#hero"    class="nav-link">Home</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a href="#todo"    class="nav-link">Tasks</a>
+        <a href="#contact" class="nav-cta">Get In Touch</a>
+      </nav>
+
+      <!-- Hamburger button — visible only on mobile -->
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="hb-line"></span>
+        <span class="hb-line"></span>
+        <span class="hb-line"></span>
+      </button>
+
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="#hero"    class="mob-link" onclick="closeMobileNav()">Home</a>
+      <a href="#contact" class="mob-link" onclick="closeMobileNav()">Contact</a>
+      <a href="#todo"    class="mob-link" onclick="closeMobileNav()">Tasks</a>
+    </div>
+  </header>
+
+
+  <!-- ================================================
+    HERO SECTION
+    Full-width welcome banner with headline and CTAs.
+  ================================================ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+
+      <!-- Eyebrow label -->
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        ApexPlanet Internship — Task 2
+      </div>
+
+      <!-- Main heading -->
+      <h1 class="hero-title">
+        Build. Validate.<br/>
+        <span class="title-gradient">Get Things Done.</span>
+      </h1>
+
+      <!-- Subtitle paragraph -->
+      <p class="hero-sub">
+        A fully responsive web application featuring a real-time validated
+        contact form and an interactive task manager — built with pure
+        HTML, CSS &amp; JavaScript.
+      </p>
+
+      <!-- Feature tags -->
+      <div class="hero-tags">
+        <span class="tag">✅ Form Validation</span>
+        <span class="tag">📋 Task Manager</span>
+        <span class="tag">📱 Responsive</span>
+        <span class="tag">⚡ Vanilla JS</span>
+      </div>
+
+      <!-- CTA buttons -->
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Send Message</a>
+        <a href="#todo"    class="btn btn-ghost">Manage Tasks</a>
+      </div>
+
+    </div>
+
+    <!-- Decorative code-window graphic -->
+    <div class="hero-visual" aria-hidden="true">
+      <div class="code-window">
+        <div class="cw-bar">
+          <span class="cw-circle red"></span>
+          <span class="cw-circle yellow"></span>
+          <span class="cw-circle green"></span>
+          <span class="cw-title">script.js</span>
+        </div>
+        <div class="cw-body">
+          <p class="cw-line"><span class="kw">function</span> <span class="fn">validateForm</span>() {</p>
+          <p class="cw-line indent"><span class="kw">if</span> (!email.test(val)) {</p>
+          <p class="cw-line indent2">showError(<span class="str">"Invalid email"</span>);</p>
+          <p class="cw-line indent">}</p>
+          <p class="cw-line indent"><span class="kw">return</span> <span class="bool">true</span>;</p>
+          <p class="cw-line">}</p>
+          <div class="cw-badge">✓ Validated</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ================================================
+    STATS STRIP
+    Three animated counters above the main panels.
+  ================================================ -->
+  <div class="stats-strip">
+    <div class="strip-inner">
+      <div class="strip-item">
+        <strong id="statTotal">0</strong>
+        <span>Total Tasks</span>
+      </div>
+      <div class="strip-divider"></div>
+      <div class="strip-item">
+        <strong id="statDone">0</strong>
+        <span>Completed</span>
+      </div>
+      <div class="strip-divider"></div>
+      <div class="strip-item">
+        <strong id="statPct">0%</strong>
+        <span>Progress</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================================================
+    MAIN CONTENT
+    CSS Grid: two equal columns on desktop,
+    single column on tablet/mobile.
+  ================================================ -->
+  <main class="main-grid" id="main">
+
+    <!-- ============================================
+      CONTACT FORM PANEL  (Left Column)
+    ============================================ -->
+    <section class="panel" id="contact">
+
+      <!-- Panel header -->
+      <div class="panel-hd">
+        <div class="panel-icon purple-bg">✉️</div>
+        <div class="panel-hd-text">
+          <h2>Contact Us</h2>
+          <p>We'll get back to you within 24 hours.</p>
+        </div>
+      </div>
+
+      <!-- ---- CONTACT FORM ---- -->
+      <form class="c-form" id="contactForm" novalidate>
+
+        <!-- Name -->
+        <div class="f-group" id="grpName">
+          <label class="f-label" for="inp-name">
+            Full Name <span class="f-req">*</span>
+          </label>
+          <div class="f-wrap">
+            <span class="f-ico">👤</span>
+            <input
+              class="f-input"
+              type="text"
+              id="inp-name"
+              name="name"
+              placeholder="e.g. Arjun Sharma"
+              autocomplete="name"
+              maxlength="80"
+            />
+          </div>
+          <!-- Error shown by JS -->
+          <p class="f-err" id="err-name" role="alert"></p>
+        </div>
+
+        <!-- Email -->
+        <div class="f-group" id="grpEmail">
+          <label class="f-label" for="inp-email">
+            Email Address <span class="f-req">*</span>
+          </label>
+          <div class="f-wrap">
+            <span class="f-ico">📧</span>
+            <input
+              class="f-input"
+              type="email"
+              id="inp-email"
+              name="email"
+              placeholder="e.g. arjun@gmail.com"
+              autocomplete="email"
+            />
+          </div>
+          <p class="f-err" id="err-email" role="alert"></p>
+        </div>
+
+        <!-- Phone -->
+        <div class="f-group" id="grpPhone">
+          <label class="f-label" for="inp-phone">
+            Phone Number <span class="f-req">*</span>
+          </label>
+          <div class="f-wrap">
+            <span class="f-ico">📞</span>
+            <input
+              class="f-input"
+              type="tel"
+              id="inp-phone"
+              name="phone"
+              placeholder="e.g. 9876543210"
+              autocomplete="tel"
+              maxlength="15"
+            />
+          </div>
+          <p class="f-err" id="err-phone" role="alert"></p>
+        </div>
+
+        <!-- Message -->
+        <div class="f-group" id="grpMessage">
+          <label class="f-label" for="inp-message">
+            Message <span class="f-req">*</span>
+          </label>
+          <div class="f-wrap f-wrap-ta">
+            <span class="f-ico f-ico-ta">💬</span>
+            <textarea
+              class="f-input f-textarea"
+              id="inp-message"
+              name="message"
+              rows="4"
+              placeholder="Write your message here…"
+              maxlength="500"
+            ></textarea>
+          </div>
+          <div class="f-row-btm">
+            <p class="f-err" id="err-message" role="alert"></p>
+            <span class="f-counter" id="msgCounter">0 / 500</span>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+          <span class="btn-label">Send Message</span>
+          <span class="btn-arrow">→</span>
+        </button>
+
+      </form>
+
+      <!-- ---- SUCCESS STATE (hidden until form submits) ---- -->
+      <div class="form-success" id="formSuccess" hidden>
+        <div class="fs-icon">🎉</div>
+        <h3>Message Sent!</h3>
+        <p>Thanks for reaching out. We'll reply within 24 hours.</p>
+        <button class="btn btn-ghost" id="resetBtn">Send Another Message</button>
+      </div>
+
+    </section><!-- /contact panel -->
+
+
+    <!-- ============================================
+      TO-DO LIST PANEL  (Right Column)
+    ============================================ -->
+    <section class="panel" id="todo">
+
+      <!-- Panel header -->
+      <div class="panel-hd">
+        <div class="panel-icon teal-bg">📋</div>
+        <div class="panel-hd-text">
+          <h2>Task Manager</h2>
+          <!-- Live count — updated by JS -->
+          <p id="taskMetaText">0 tasks &bull; 0 completed</p>
+        </div>
+      </div>
+
+      <!-- Add-task input row -->
+      <div class="add-row">
+        <div class="add-wrap">
+          <span class="add-plus">＋</span>
+          <input
+            class="add-input"
+            type="text"
+            id="taskInput"
+            placeholder="Add a new task and press Enter…"
+            maxlength="120"
+            aria-label="New task"
+          />
+        </div>
+        <button class="btn btn-teal" id="addBtn">Add</button>
+      </div>
+
+      <!-- Filter tabs: All / Active / Done -->
+      <div class="filter-bar" role="tablist" aria-label="Task filter">
+        <button class="f-tab active" data-filter="all"    role="tab" aria-selected="true">All</button>
+        <button class="f-tab"        data-filter="active" role="tab" aria-selected="false">Active</button>
+        <button class="f-tab"        data-filter="done"   role="tab" aria-selected="false">Done</button>
+      </div>
+
+      <!-- Task list (populated by JS) -->
+      <ul class="task-list" id="taskList" aria-label="Tasks"></ul>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="emptyState">
+        <span class="empty-ico">🗂️</span>
+        <p>No tasks here. Add one above!</p>
+      </div>
+
+      <!-- List footer: remaining count + clear button -->
+      <div class="todo-footer" id="todoFooter" hidden>
+        <span class="tf-count" id="remainCount">0 tasks remaining</span>
+        <button class="tf-clear" id="clearDoneBtn">Clear completed</button>
+      </div>
+
+    </section><!-- /todo panel -->
+
+  </main><!-- /main-grid -->
+
+
+  <!-- ================================================
+    FOOTER
+  ================================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="nav-brand">
+        <span class="brand-dot"></span> DevHub
+      </span>
+      <p>Built for the <strong>ApexPlanet</strong> 45-Day Internship — Task 2</p>
+      <p class="footer-copy">&copy; <span id="footerYear"></span> &nbsp;HTML &bull; CSS &bull; JavaScript</p>
+    </div>
+  </footer>
+
+
+  <!-- External JS (loaded last so DOM is ready) -->
+  <script src="script.js"></script>
+
+</body>
+</html>
